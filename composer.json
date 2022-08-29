@@ -10,9 +10,10 @@
   },
   "require": {
     "atk4/data": "2.4.*",
-    "philippgrashoff/traitsforatkdata": "2.4.*"
+    "ext-intl": "*"
   },
   "require-dev": {
+    "philippgrashoff/traitsforatkdata": "2.4.*",
     "phpunit/phpunit": ">8"
   },
   "autoload": {

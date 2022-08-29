@@ -1,91 +1,68 @@
 <?php declare(strict_types=1);
 
-namespace traitsforatkdata\tests;
+namespace atkdatagermanextensions\tests;
 
-use Atk4\Data\Model;
-use Atk4\Data\Persistence;
+use atkdatagermanextensions\GermanHelpers;
+use atkdatagermanextensions\tests\testclasses\ModelWithDateTimeFields;
 use traitsforatkdata\TestCase;
-use atk4\schema\Migration;
-use traitsforatkdata\DateTimeHelpersTrait;
 
 
-class GermanHelpersTest extends TestCase {
+class GermanHelpersTest extends TestCase
+{
 
+    protected $sqlitePersistenceModels = [
+        ModelWithDateTimeFields::class
+    ];
 
     public function testArrayToGermanCommaList(): void
     {
-        $t = new Template();
-        $t->app = $this->app;
-        $t->loadTemplateFromString('Hallo {$DADA} Test');
-        $t->setGermanList('DADA', ['Hansi', '', 'Peter', 'Klaus']);
-        self::assertTrue(strpos($t->render(), 'Hansi, Peter und Klaus') !== false);
+        self::assertSame(
+            'Hansi, Peter und Klaus',
+            GermanHelpers::arrayToGermanCommaList(['Hansi', '', 'Peter', 'Klaus'])
+        );
     }
 
-    public function testDateCasting() {
-        $dth = $this->getTestModel();
+    public function testDateCasting(): void
+    {
+        $testModel = new ModelWithDateTimeFields($this->getSqliteTestPersistence());
         self::assertEquals(
             (new \DateTime())->format('d.m.Y H:i:s'),
-            $dth->castDateTimeToGermanString($dth->getField('datetime'))
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('datetime'))
         );
         self::assertEquals(
             (new \DateTime())->format('d.m.Y'),
-            $dth->castDateTimeToGermanString($dth->getField('date'))
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('date'))
         );
         self::assertEquals(
             (new \DateTime())->format('H:i:s'),
-            $dth->castDateTimeToGermanString($dth->getField('time'))
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('time'))
         );
         self::assertEquals(
             '',
-            $dth->castDateTimeToGermanString($dth->getField('some_other_field'))
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('some_other_field'))
         );
     }
 
-    public function testShortenTime() {
-        $dth = $this->getTestModel();
+    public function testShortenTime(): void
+    {
+        $testModel = new ModelWithDateTimeFields($this->getSqliteTestPersistence());
         self::assertEquals(
             (new \DateTime())->format('d.m.Y H:i'),
-            $dth->castDateTimeToGermanString($dth->getField('datetime'), true)
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('datetime'), true)
         );
         self::assertEquals(
             (new \DateTime())->format('H:i'),
-            $dth->castDateTimeToGermanString($dth->getField('time'), true)
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('time'), true)
         );
     }
 
-    public function testNoDateTimeInterFaceValue() {
-        $dth = $this->getTestModel();
-        $dth->set('some_other_field', 'lala');
+    public function testNoDateTimeInterFaceValue(): void
+    {
+        $testModel = new ModelWithDateTimeFields($this->getSqliteTestPersistence());
+        $testModel->set('some_other_field', 'lala');
         self::assertEquals(
             'lala',
-            $dth->castDateTimeToGermanString($dth->getField('some_other_field'))
+            GermanHelpers::dateTimeFieldToGermanString($testModel->getField('some_other_field'))
         );
-    }
-
-    protected function getTestModel(): Model {
-        $class = new class() extends Model {
-
-            use DateTimeHelpersTrait;
-
-            public $table = 'some_table';
-
-            protected function init(): void
-            {
-                parent::init();
-                $this->addField('datetime', ['type' => 'datetime']);
-                $this->addField('date', ['type' => 'date']);
-                $this->addField('time', ['type' => 'time']);
-                $this->addField('some_other_field');
-
-                $this->set('datetime', new \DateTime());
-                $this->set('date', new \DateTime());
-                $this->set('time', new \DateTime());
-            }
-        };
-
-        $persistence = Persistence::connect('sqlite::memory:');
-        $model = new $class($persistence);
-
-        return $model;
     }
 }

@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace atkdatagermanextenions;
+namespace atkdatagermanextensions;
 
 use Atk4\Data\Field;
 
-class GermanHelpers {
-
+class GermanHelpers
+{
 
     /**
      * makes german formatted strings from date, time and datetime fields
      */
-    public static function castDateTimeToGermanString(Field $field, bool $shortenTime = false): string
+    public static function dateTimeFieldToGermanString(Field $field, bool $shortenTime = false): string
     {
         //no DateTimeInterFace passed? Just return given value
         if ($field->get() instanceof \DateTimeInterface) {
@@ -43,12 +43,12 @@ class GermanHelpers {
         $return = '';
         $counter = 0;
         foreach ($a as $item) {
+            $counter++;
             if (empty($item)) {
                 continue;
             }
 
-            $counter++;
-            if ($counter === 1) {
+            if (strlen($return) === 0) {
                 $return .= $item;
             } elseif ($counter === count($a)) {
                 $return .= ' und ' . $item;
@@ -56,7 +56,7 @@ class GermanHelpers {
                 $return .= ', ' . $item;
             }
         }
+
         return $return;
     }
-
 }

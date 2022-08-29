@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace traitsforatkdata\tests;
+namespace atkdatagermanextensions\tests;
 
 use Atk4\Data\Model;
-use traitsforatkdata\GermanMoneyFormatFieldTrait;
-use traitsforatkdata\TestCase;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Persistence\Ui;
+use traitsforatkdata\GermanMoneyFormatFieldTrait;
+use traitsforatkdata\TestCase;
 
 class GermanMoneyFormatFieldTraitTest extends TestCase
 {

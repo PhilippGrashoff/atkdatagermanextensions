@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace traitsforatkdata;
+namespace atkdatagermanextensions;
 
 use Atk4\Data\Exception;
 use Atk4\Data\Field;
