@@ -13,8 +13,8 @@
     "ext-intl": "*"
   },
   "require-dev": {
-    "philippgrashoff/traitsforatkdata": "2.4.*",
-    "phpunit/phpunit": ">8"
+    "phpunit/phpunit": ">8",
+    "atk4/ui": "2.4.*"
   },
   "autoload": {
     "psr-4": {
