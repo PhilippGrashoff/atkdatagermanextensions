@@ -10,7 +10,8 @@
   },
   "require": {
     "atk4/data": "2.4.*",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": ">8",
